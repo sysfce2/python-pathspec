@@ -26,6 +26,14 @@ bench-gitignore: _bench_gitignore
 [group('Development')]
 bench-pathspec: _bench_pathspec
 
+# Run type checking with mypy.
+[group('Development')]
+check-mypy: _check_mypy
+
+# Run type checking with pyright.
+[group('Development')]
+check-pyright: _check_pyright
+
 # Run tests using the CPython virtual environment.
 [group('Development')]
 test: _test_primary
@@ -94,6 +102,12 @@ _bench_pathspec:
 _build_docs:
 	{{cpy_run}} sphinx-build -aWEnqb html doc/source doc/build
 
+_check_mypy:
+	{{cpy_run}} mypy pathspec tests/check_usage.py
+
+_check_pyright:
+	{{cpy_run}} pyright pathspec tests/check_usage.py
+
 _test_all:
 	{{cpy_run}} tox
 
@@ -107,7 +121,7 @@ _venv_cpy_create:
 	{{cpy_bin}} -m venv --clear dev/venv-cpy
 
 _venv_cpy_update:
-	{{cpy_run}} pip install -r doc/requirements.txt --upgrade build google-re2 google-re2-stubs hyperscan packaging pip pytest pytest-benchmark setuptools tomli tox twine typing-extensions wheel
+	{{cpy_run}} pip install -r doc/requirements.txt --uploaded-prior-to "$(date -d '7 days ago' '+%Y-%m-%d')" --upgrade build google-re2 google-re2-stubs hyperscan mypy packaging pip pyright pytest pytest-benchmark setuptools tomli tox twine typing-extensions wheel
 	{{cpy_run}} pip install -e .
 
 _venv_pypy_create:
