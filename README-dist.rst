@@ -227,8 +227,26 @@ Change History
 ==============
 
 
+1.1.1 (2026-04-26)
+------------------
+
+Improvements:
+
+- Improved type checking with mypy and pyright.
+
+Bug fixes:
+
+- Fixed typing on `PathSpec[TPattern]` to `PathSpec[TPattern_co]`.
+- Added missing variant type-hint `type[Pattern]` to `PathSpec.from_lines()` parameter `pattern_factory`.
+- Fixed possible type error when using `+` and `+=` operators on `PathSpec`.
+
+
 1.1.0 (2026-04-22)
 ------------------
+
+New features:
+
+- `Issue #108`_: Specialize pattern type for `PathSpec` as `PathSpec[TPattern]` for better debugging of `PathSpec().patterns`.
 
 Bug fixes:
 
@@ -237,7 +255,6 @@ Bug fixes:
 
 Improvements:
 
-- `Issue #108`_: Specialize pattern type for `PathSpec` as `PathSpec[TPattern]` for better debugging of `PathSpec().patterns`.
 - `Pull #110`_: Nicer debug print outs (and str for regex pattern).
 
 
