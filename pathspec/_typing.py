@@ -8,30 +8,36 @@ a vendored copy of :module:`typing_extensions`.
 """
 
 import functools
+import sys
 import warnings
 from typing import (
 	Any,
 	Callable,  # Replaced by `collections.abc.Callable` in 3.9.2.
 	Optional,  # Replaced by `X | None` in 3.10.
 	TypeVar)
-try:
-	from typing import AnyStr  # Removed in 3.18.
-except ImportError:
-	AnyStr = TypeVar('AnyStr', str, bytes)  # type: ignore[misc]
-try:
-	from typing import Never  # Added in 3.11.
-except ImportError:
-	from typing import NoReturn as Never
 
 F = TypeVar('F', bound=Callable[..., Any])
 
-try:
-	from warnings import deprecated  # Added in 3.13.  # type: ignore
-except ImportError:
+# AnyStr is deprecated since 3.13, and will be removed in 3.18.
+if sys.version_info >= (3, 18):
+	AnyStr = TypeVar('AnyStr', str, bytes)
+else:
+	from typing import AnyStr
+
+# Never was added in 3.11.
+if sys.version_info >= (3, 11):
+	from typing import Never
+else:
+	from typing import NoReturn as Never
+
+# deprecated was added in 3.13.
+if sys.version_info >= (3, 13):
+	from warnings import deprecated
+else:
 	try:
-		from typing_extensions import deprecated  # type: ignore
+		from typing_extensions import deprecated
 	except ImportError:
-		def deprecated(  # type: ignore[no-redef]
+		def deprecated(
 			message: str,
 			/, *,
 			category: Optional[type[Warning]] = DeprecationWarning,
@@ -42,12 +48,13 @@ except ImportError:
 				def wrapper(*a, **k):
 					warnings.warn(message, category=category, stacklevel=stacklevel+1)
 					return f(*a, **k)
-				return wrapper  # type: ignore[return-value]
+				return wrapper
 			return decorator
 
-try:
-	from typing import override  # Added in 3.12.
-except ImportError:
+# override was added in 3.12.
+if sys.version_info >= (3, 12):
+	from typing import override
+else:
 	try:
 		from typing_extensions import override
 	except ImportError:
