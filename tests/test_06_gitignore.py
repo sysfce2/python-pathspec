@@ -907,3 +907,14 @@ class GitIgnoreSpecTest(unittest.TestCase):
 					"node_modules/",
 					"node_modules/leaf.txt",
 				}, debug)
+
+	def test_globstars_match_newlines_in_directory_names(self):
+		for pattern, path in [
+			("target", "line\nbreak/target"),
+			("**/target", "line\nbreak/target"),
+			("root/**/target", "root/line\nbreak/target"),
+			("**/target", "\n/target"),
+		]:
+			for sub_test in self.parameterize_from_lines([pattern]):
+				with self.subTest(pattern=pattern, path=path), sub_test() as spec:
+					self.assertTrue(spec.match_file(path))
