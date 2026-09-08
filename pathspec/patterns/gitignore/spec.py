@@ -317,11 +317,11 @@ class GitIgnoreSpecPattern(_GitIgnoreBasePattern):
 				else:
 					assert i == end, (i, end)
 					# A normalized pattern ending with double-asterisks ('**') will match
-					# any trailing path segments.
+					# nonempty trailing path segments, not the parent directory itself.
 					if is_dir_pattern:
 						out_parts.append(_DIR_MARK_CG)
 					else:
-						out_parts.append('/')
+						out_parts.append('/[^/]')
 
 			else:
 				# Match path segment.

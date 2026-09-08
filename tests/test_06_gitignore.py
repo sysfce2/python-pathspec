@@ -907,3 +907,11 @@ class GitIgnoreSpecTest(unittest.TestCase):
 					"node_modules/",
 					"node_modules/leaf.txt",
 				}, debug)
+
+	def test_trailing_globstar_does_not_ignore_parent(self):
+		for sub_test in self.parameterize_from_lines(["d/**"]):
+			with sub_test() as spec:
+				self.assertFalse(spec.match_file("d/"))
+				self.assertTrue(spec.match_file("d/file"))
+				self.assertTrue(spec.match_file("d/child/"))
+				self.assertTrue(spec.match_file("d/\nfile"))

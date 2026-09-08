@@ -221,7 +221,7 @@ class GitIgnoreBasicPattern(_GitIgnoreBasePattern):
 		elif pattern_segs is not None:
 			# Build regular expression from pattern.
 			try:
-				regex_parts = cls.__translate_segments(pattern_segs)
+				regex_parts = cls.__translate_segments(is_dir_pattern, pattern_segs)
 			except ValueError as e:
 				raise GitIgnorePatternError((
 					f"Invalid git pattern: {original_pattern!r}"
@@ -245,9 +245,12 @@ class GitIgnoreBasicPattern(_GitIgnoreBasePattern):
 		return (out_regex, include)
 
 	@classmethod
-	def __translate_segments(cls, pattern_segs: list[str]) -> list[str]:
+	def __translate_segments(cls, is_dir_pattern: bool, pattern_segs: list[str]) -> list[str]:
 		"""
 		Translate the pattern segments to regular expressions.
+
+		*is_dir_pattern* (:class:`bool`) is whether the original pattern ends
+		with a slash.
 
 		*pattern_segs* (:class:`list` of :class:`str`) contains the pattern
 		segments.
@@ -276,8 +279,8 @@ class GitIgnoreBasicPattern(_GitIgnoreBasePattern):
 				else:
 					assert i == end, (i, end)
 					# A normalized pattern ending with double-asterisks ('**') will match
-					# any trailing path segments.
-					out_parts.append('/')
+					# nonempty trailing path segments, not the parent directory itself.
+					out_parts.append('/' if is_dir_pattern else '/[^/]')
 
 			else:
 				# Match path segment.
