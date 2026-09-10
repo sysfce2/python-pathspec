@@ -908,10 +908,32 @@ class GitIgnoreSpecTest(unittest.TestCase):
 					"node_modules/leaf.txt",
 				}, debug)
 
-	def test_trailing_globstar_does_not_ignore_parent(self):
+
+	def test_12_issue_132_a(self):
+    """
+    Test that trailing glob-stars do not ignore parent.
+    """
 		for sub_test in self.parameterize_from_lines(["d/**"]):
 			with sub_test() as spec:
 				self.assertFalse(spec.match_file("d/"))
 				self.assertTrue(spec.match_file("d/file"))
 				self.assertTrue(spec.match_file("d/child/"))
 				self.assertTrue(spec.match_file("d/\nfile"))
+
+	def test_13_issue_139(self):
+		"""
+		Test that glob-stars match newlines in names.
+		"""
+		for pattern, path in [
+			("target", "line\nbreak/target"),
+			("*/target", "line\nbreak/target"),
+			("**/target", "line\nbreak/target"),
+			("root/*/target", "root/line\nbreak/target"),
+			("root/**/target", "root/line\nbreak/target"),
+			("*/target", "\n/target"),
+			("**/target", "\n/target"),
+		]:
+			for sub_test in self.parameterize_from_lines([pattern]):
+				with sub_test() as spec:
+					self.assertTrue(spec.match_file(path))
+

@@ -24,6 +24,7 @@ Bug fixes:
 - `Pull #133`_: Capture the directory marker in the `*/**` regex shortcut so `!*/` can re-include directories.
 - `Issue #134`_: GitIgnoreSpec: reverse and forward evaluation disagree.
 - `Pull #135`_: Escape trailing spaces in `GitIgnoreSpecPattern.escape()`.
+- `Pull #139`_: Match newline characters in paths with `*` and `**`.
 
 
 .. _`Issue #116`: https://github.com/cpburnz/python-pathspec/issues/116
@@ -35,6 +36,7 @@ Bug fixes:
 .. _`Pull #133`: https://github.com/cpburnz/python-pathspec/pull/133
 .. _`Issue #134`: https://github.com/cpburnz/python-pathspec/issues/134
 .. _`Pull #135`: https://github.com/cpburnz/python-pathspec/pull/135
+.. _`Pull #139`: https://github.com/cpburnz/python-pathspec/pull/139
 
 
 1.1.1 (2026-04-26)

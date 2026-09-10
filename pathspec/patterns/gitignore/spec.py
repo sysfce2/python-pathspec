@@ -39,7 +39,7 @@ _DIR_MARK_OPT = f'(?:{_DIR_MARK_CG}|$)'
 This regular expression matches the optional directory marker and sub-path.
 """
 
-_MATCH_ALL = f'^(?:.+/)?[^/]+{_DIR_MARK_OPT}'
+_MATCH_ALL = f'^(?s:.+/)?[^/]+{_DIR_MARK_OPT}'
 """
 This regular expression matches every path. It is the expansion of the patterns
 "*" and "**" (i.e., "**/{any name}"), and it has to capture the directory marker
@@ -306,12 +306,12 @@ class GitIgnoreSpecPattern(_GitIgnoreBasePattern):
 				if i == 0:
 					# A normalized pattern beginning with double-asterisks ('**') will
 					# match any leading path segments.
-					out_parts.append('^(?:.+/)?')
+					out_parts.append('^(?s:.+/)?')
 
 				elif i < end:
 					# A pattern with inner double-asterisks ('**') will match multiple (or
 					# zero) inner path segments.
-					out_parts.append('(?:/.+)?')
+					out_parts.append('(?s:/.+)?')
 					need_slash = True
 
 				else:

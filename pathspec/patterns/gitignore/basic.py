@@ -98,7 +98,7 @@ class GitIgnoreBasicPattern(_GitIgnoreBasePattern):
 				return (None, '/')
 			else:
 				# The pattern "**" will match every path. Special case this pattern.
-				return (None, '.')
+				return (None, '(?s:.)')
 
 		elif (
 			seg_count == 2
@@ -107,7 +107,7 @@ class GitIgnoreBasicPattern(_GitIgnoreBasePattern):
 		):
 			# The pattern "*" will be normalized to "**/*" and will match every
 			# path. Special case this pattern for efficiency.
-			return (None, '.')
+			return (None, '(?s:.)')
 
 		elif (
 			seg_count == 3
@@ -268,12 +268,12 @@ class GitIgnoreBasicPattern(_GitIgnoreBasePattern):
 					# match any leading path segments.
 					# - NOTICE: '(?:^|/)' benchmarks slower using p15 (sm=0.9382,
 					#   hs=0.9966, re2=0.9337).
-					out_parts.append('^(?:.+/)?')
+					out_parts.append('^(?s:.+/)?')
 
 				elif i < end:
 					# A pattern with inner double-asterisks ('**') will match multiple (or
 					# zero) inner path segments.
-					out_parts.append('(?:/.+)?')
+					out_parts.append('(?s:/.+)?')
 					need_slash = True
 
 				else:

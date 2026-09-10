@@ -99,7 +99,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		# GitIgnoreSpecPattern.
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('/')
 		self.assertTrue(include)
-		self.assertEqual(regex, '.')
+		self.assertEqual(regex, '(?s:.)')
 
 	def test_01_absolute_root_2_double_asterisk(self):
 		"""
@@ -138,7 +138,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('spam')
 		self.assertTrue(include)
-		self.assertEqual(regex, f'^(?:.+/)?spam{_DIR_OPT}')
+		self.assertEqual(regex, f'^(?s:.+/)?spam{_DIR_OPT}')
 
 		pattern = GitIgnoreBasicPattern(re.compile(regex), include)
 		results = set(filter(pattern.match_file, [
@@ -202,7 +202,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('!temp')
 		self.assertIs(include, False)
-		self.assertEqual(regex, f'^(?:.+/)?temp{_DIR_OPT}')
+		self.assertEqual(regex, f'^(?s:.+/)?temp{_DIR_OPT}')
 
 		# NOTE: The pattern match is backwards because the pattern itself
 		# does not consider the include attribute.
@@ -256,7 +256,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('left/**/right')
 		self.assertTrue(include)
-		self.assertEqual(regex, f'^left(?:/.+)?/right{_DIR_OPT}')
+		self.assertEqual(regex, f'^left(?s:/.+)?/right{_DIR_OPT}')
 
 		pattern = GitIgnoreBasicPattern(re.compile(regex), include)
 		results = set(filter(pattern.match_file, [
@@ -279,7 +279,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('**')
 		self.assertTrue(include)
-		self.assertEqual(regex, '.')
+		self.assertEqual(regex, '(?s:.)')
 
 		pattern = GitIgnoreBasicPattern(re.compile(regex), include)
 		results = set(filter(pattern.match_file, [
@@ -316,7 +316,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/spam')
 		self.assertTrue(include)
-		self.assertEqual(regex, f'^(?:.+/)?spam{_DIR_OPT}')
+		self.assertEqual(regex, f'^(?s:.+/)?spam{_DIR_OPT}')
 
 		pattern = GitIgnoreBasicPattern(re.compile(regex), include)
 		results = set(filter(pattern.match_file, [
@@ -336,7 +336,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('**')
 		self.assertTrue(include)
-		self.assertEqual(regex, '.')
+		self.assertEqual(regex, '(?s:.)')
 
 		equiv_regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/**')
 		self.assertTrue(include)
@@ -348,7 +348,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/api')
 		self.assertTrue(include)
-		self.assertEqual(regex, f'^(?:.+/)?api{_DIR_OPT}')
+		self.assertEqual(regex, f'^(?s:.+/)?api{_DIR_OPT}')
 
 		equiv_regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/**/api')
 		self.assertTrue(include)
@@ -356,7 +356,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/api/')
 		self.assertTrue(include)
-		self.assertEqual(regex, '^(?:.+/)?api/')
+		self.assertEqual(regex, '^(?s:.+/)?api/')
 
 		equiv_regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/**/api/')
 		self.assertTrue(include)
@@ -364,7 +364,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/api/**')
 		self.assertTrue(include)
-		self.assertEqual(regex, '^(?:.+/)?api/[^/]')
+		self.assertEqual(regex, '^(?s:.+/)?api/[^/]')
 
 		equiv_regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/**/api/**/**')
 		self.assertTrue(include)
@@ -398,7 +398,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('foo-*-bar')
 		self.assertTrue(include)
-		self.assertEqual(regex, f'^(?:.+/)?foo\\-[^/]*\\-bar{_DIR_OPT}')
+		self.assertEqual(regex, f'^(?s:.+/)?foo\\-[^/]*\\-bar{_DIR_OPT}')
 
 		pattern = GitIgnoreBasicPattern(re.compile(regex), include)
 		results = set(filter(pattern.match_file, [
@@ -430,7 +430,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('~temp-*')
 		self.assertTrue(include)
-		self.assertEqual(regex, f'^(?:.+/)?\\~temp\\-[^/]*{_DIR_OPT}')
+		self.assertEqual(regex, f'^(?s:.+/)?\\~temp\\-[^/]*{_DIR_OPT}')
 
 		pattern = GitIgnoreBasicPattern(re.compile(regex), include)
 		results = set(filter(pattern.match_file, [
@@ -461,7 +461,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('*.py')
 		self.assertTrue(include)
-		self.assertEqual(regex, f'^(?:.+/)?[^/]*\\.py{_DIR_OPT}')
+		self.assertEqual(regex, f'^(?s:.+/)?[^/]*\\.py{_DIR_OPT}')
 
 		pattern = GitIgnoreBasicPattern(re.compile(regex), include)
 		results = set(filter(pattern.match_file, [
@@ -493,7 +493,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('dir/')
 		self.assertTrue(include)
-		self.assertEqual(regex, '^(?:.+/)?dir/')
+		self.assertEqual(regex, '^(?s:.+/)?dir/')
 
 		pattern = GitIgnoreBasicPattern(re.compile(regex), include)
 		results = set(filter(pattern.match_file, [
@@ -751,7 +751,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('*')
 		self.assertTrue(include)
-		self.assertEqual(regex, '.')
+		self.assertEqual(regex, '(?s:.)')
 
 	def test_12_asterisk_2_regex_equivalent(self):
 		"""
@@ -866,7 +866,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		# GitIgnoreSpecPattern should not.
 		pattern = GitIgnoreBasicPattern('!libfoo/')
 
-		self.assertEqual(pattern.regex.pattern, '^(?:.+/)?libfoo/')
+		self.assertEqual(pattern.regex.pattern, '^(?s:.+/)?libfoo/')
 		self.assertIs(pattern.include, False)
 		self.assertTrue(pattern.match_file('libfoo/__init__.py'))
 
@@ -876,7 +876,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		pattern = GitIgnoreBasicPattern('foo**')
 		self.assertIs(pattern.include, True)
-		self.assertEqual(pattern.regex.pattern, f'^(?:.+/)?foo[^/]*[^/]*{_DIR_OPT}')
+		self.assertEqual(pattern.regex.pattern, f'^(?s:.+/)?foo[^/]*[^/]*{_DIR_OPT}')
 		self.assertTrue(pattern.match_file('foosrodah'))
 
 	def test_15_issue_93_a_2(self):
@@ -895,7 +895,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		pattern = GitIgnoreBasicPattern(' foo')
 		self.assertIs(pattern.include, True)
-		self.assertEqual(pattern.regex.pattern, f'^(?:.+/)?\\ foo{_DIR_OPT}')
+		self.assertEqual(pattern.regex.pattern, f'^(?s:.+/)?\\ foo{_DIR_OPT}')
 		self.assertFalse(pattern.match_file('foo'))
 		self.assertTrue(pattern.match_file(' foo'))
 
@@ -905,7 +905,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		pattern = GitIgnoreBasicPattern('  foo')
 		self.assertIs(pattern.include, True)
-		self.assertEqual(pattern.regex.pattern, f'^(?:.+/)?\\ \\ foo{_DIR_OPT}')
+		self.assertEqual(pattern.regex.pattern, f'^(?s:.+/)?\\ \\ foo{_DIR_OPT}')
 		self.assertFalse(pattern.match_file('foo'))
 		self.assertFalse(pattern.match_file(' foo'))
 		self.assertTrue(pattern.match_file('  foo'))
@@ -915,12 +915,12 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		Test patterns with valid range notation.
 		"""
 		for raw_pattern, regex in [
-			('[!a-z]', f'^(?:.+/)?[^a-z]{_DIR_OPT}'),
-			('[^a-z]', f'^(?:.+/)?[^a-z]{_DIR_OPT}'),
-			('[a-z]', f'^(?:.+/)?[a-z]{_DIR_OPT}'),
-			('a[!a-z]', f'^(?:.+/)?a[^a-z]{_DIR_OPT}'),
-			('a[^a-z]', f'^(?:.+/)?a[^a-z]{_DIR_OPT}'),
-			('a[a-z]', f'^(?:.+/)?a[a-z]{_DIR_OPT}'),
+			('[!a-z]', f'^(?s:.+/)?[^a-z]{_DIR_OPT}'),
+			('[^a-z]', f'^(?s:.+/)?[^a-z]{_DIR_OPT}'),
+			('[a-z]', f'^(?s:.+/)?[a-z]{_DIR_OPT}'),
+			('a[!a-z]', f'^(?s:.+/)?a[^a-z]{_DIR_OPT}'),
+			('a[^a-z]', f'^(?s:.+/)?a[^a-z]{_DIR_OPT}'),
+			('a[a-z]', f'^(?s:.+/)?a[a-z]{_DIR_OPT}'),
 		]:
 			with self.subTest(f"p={raw_pattern!r}"):
 				pattern = GitIgnoreBasicPattern(raw_pattern)
@@ -933,10 +933,10 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		# The basic pattern treats invalid range notation as a literal.
 		for raw_pattern, regex in [
-			('[!]', f'^(?:.+/)?\\[!\\]{_DIR_OPT}'),
-			('[^]', f'^(?:.+/)?\\[\\^\\]{_DIR_OPT}'),
-			('a[!]', f'^(?:.+/)?a\\[!\\]{_DIR_OPT}'),
-			('a[^]', f'^(?:.+/)?a\\[\\^\\]{_DIR_OPT}'),
+			('[!]', f'^(?s:.+/)?\\[!\\]{_DIR_OPT}'),
+			('[^]', f'^(?s:.+/)?\\[\\^\\]{_DIR_OPT}'),
+			('a[!]', f'^(?s:.+/)?a\\[!\\]{_DIR_OPT}'),
+			('a[^]', f'^(?s:.+/)?a\\[\\^\\]{_DIR_OPT}'),
 		]:
 			with self.subTest(f"p={raw_pattern!r}"):
 				pattern = GitIgnoreBasicPattern(raw_pattern)
@@ -957,19 +957,19 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		Test patterns with unclosed range notation.
 		"""
 		for raw_pattern, regex in [
-			('[!', f'^(?:.+/)?\\[!{_DIR_OPT}'),
-			('[', f'^(?:.+/)?\\[{_DIR_OPT}'),
-			('[-', f'^(?:.+/)?\\[\\-{_DIR_OPT}'),
-			('[^', f'^(?:.+/)?\\[\\^{_DIR_OPT}'),
-			('[a', f'^(?:.+/)?\\[a{_DIR_OPT}'),
-			('[a-', f'^(?:.+/)?\\[a\\-{_DIR_OPT}'),
-			('[a-z', f'^(?:.+/)?\\[a\\-z{_DIR_OPT}'),
-			('a[!', f'^(?:.+/)?a\\[!{_DIR_OPT}'),
-			('a[', f'^(?:.+/)?a\\[{_DIR_OPT}'),
-			('a[-', f'^(?:.+/)?a\\[\\-{_DIR_OPT}'),
-			('a[^', f'^(?:.+/)?a\\[\\^{_DIR_OPT}'),
-			('a[a-', f'^(?:.+/)?a\\[a\\-{_DIR_OPT}'),
-			('a[a-z', f'^(?:.+/)?a\\[a\\-z{_DIR_OPT}'),
+			('[!', f'^(?s:.+/)?\\[!{_DIR_OPT}'),
+			('[', f'^(?s:.+/)?\\[{_DIR_OPT}'),
+			('[-', f'^(?s:.+/)?\\[\\-{_DIR_OPT}'),
+			('[^', f'^(?s:.+/)?\\[\\^{_DIR_OPT}'),
+			('[a', f'^(?s:.+/)?\\[a{_DIR_OPT}'),
+			('[a-', f'^(?s:.+/)?\\[a\\-{_DIR_OPT}'),
+			('[a-z', f'^(?s:.+/)?\\[a\\-z{_DIR_OPT}'),
+			('a[!', f'^(?s:.+/)?a\\[!{_DIR_OPT}'),
+			('a[', f'^(?s:.+/)?a\\[{_DIR_OPT}'),
+			('a[-', f'^(?s:.+/)?a\\[\\-{_DIR_OPT}'),
+			('a[^', f'^(?s:.+/)?a\\[\\^{_DIR_OPT}'),
+			('a[a-', f'^(?s:.+/)?a\\[a\\-{_DIR_OPT}'),
+			('a[a-z', f'^(?s:.+/)?a\\[a\\-z{_DIR_OPT}'),
 		]:
 			with self.subTest(f"p={raw_pattern!r}"):
 				pattern = GitIgnoreBasicPattern(raw_pattern)
@@ -983,3 +983,14 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		pattern = GitIgnoreBasicPattern('*.py')
 		self.assertEqual(repr(pattern), "GitIgnoreBasicPattern(pattern='*.py', include=True)")
 		self.assertEqual(str(pattern), '*.py')
+
+	def test_globstars_match_newlines(self):
+		for pattern, path in [
+			("target", "line\nbreak/target"),
+			("**/target", "line\nbreak/target"),
+			("root/**/target", "root/line\nbreak/target"),
+			("**", "\n"),
+			("*", "\n"),
+		]:
+			with self.subTest(pattern=pattern, path=path):
+				self.assertIsNotNone(GitIgnoreBasicPattern(pattern).match_file(path))
