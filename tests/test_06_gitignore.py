@@ -908,17 +908,36 @@ class GitIgnoreSpecTest(unittest.TestCase):
 					"node_modules/leaf.txt",
 				}, debug)
 
-
 	def test_12_issue_137_a(self):
 		"""
 		Test that trailing glob-stars do not ignore parent.
 		"""
-		for sub_test in self.parameterize_from_lines(["d/**"]):
+		for sub_test in self.parameterize_from_lines([
+			"d/**",
+		]):
 			with sub_test() as spec:
-				self.assertFalse(spec.match_file("d/"))
-				self.assertTrue(spec.match_file("d/file"))
-				self.assertTrue(spec.match_file("d/child/"))
-				self.assertTrue(spec.match_file("d/\nfile"))
+				# Confirmed results with git (v2.55.0).
+				# - NOTICE: Technically, there is a discrepancy on matching "d/" but git
+				#   does not actually match on directories, only files.
+				files = {
+					"d",         # -
+					"d/",        # 1:d/** - Discrepancy
+					"d/file",    # 1:d/**
+					"d/child/",  # 1:d/**
+					"d/\nfile",  # 1:d/**
+				}
+				results = list(spec.check_files(files))
+				ignores = get_includes(results)
+				debug = debug_results(spec, results)
+				self.assertEqual(ignores, {
+					"d/file",
+					"d/child/",
+					"d/\nfile",
+				}, debug)
+				self.assertEqual(files - ignores, {
+					"d",
+					"d/",
+				})
 
 	def test_13_issue_139(self):
 		"""
@@ -936,4 +955,3 @@ class GitIgnoreSpecTest(unittest.TestCase):
 			for sub_test in self.parameterize_from_lines([pattern]):
 				with sub_test() as spec:
 					self.assertTrue(spec.match_file(path))
-

@@ -16,14 +16,13 @@ New features:
 
 Bug fixes:
 
-- Patterns ending in ``/**`` no longer match their bare parent directory, preserving traversal to re-included children (issue #137, part A).
-
 - `Pull #123`_: Ignore invalid gitignore bracket ranges for `GitIgnoreSpec`.
 - `Pull #128`_: Support POSIX character classes (e.g. `[[:alpha:]]`) in gitignore bracket expressions.
 - `Issue #129`_ / `Pull #132`_: Fix GitIgnoreSpec re-including files under an excluded directory
 - `Pull #133`_: Capture the directory marker in the `*/**` regex shortcut so `!*/` can re-include directories.
 - `Issue #134`_: GitIgnoreSpec: reverse and forward evaluation disagree.
 - `Pull #135`_: Escape trailing spaces in `GitIgnoreSpecPattern.escape()`.
+- `Issue #137`_ / `Pull #138`_: Patterns ending in `/**` no longer match their bare parent directory, preserving traversal to re-included children.
 - `Pull #139`_: Match newline characters in paths with `*` and `**`.
 
 
@@ -36,6 +35,8 @@ Bug fixes:
 .. _`Pull #133`: https://github.com/cpburnz/python-pathspec/pull/133
 .. _`Issue #134`: https://github.com/cpburnz/python-pathspec/issues/134
 .. _`Pull #135`: https://github.com/cpburnz/python-pathspec/pull/135
+.. _`Issue #137`: https://github.com/cpburnz/python-pathspec/issues/137
+.. _`Pull #138`: https://github.com/cpburnz/python-pathspec/pull/138
 .. _`Pull #139`: https://github.com/cpburnz/python-pathspec/pull/139
 
 
