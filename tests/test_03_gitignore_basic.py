@@ -229,11 +229,12 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('spam/**')
 		self.assertTrue(include)
-		self.assertEqual(regex, '^spam/')
+		self.assertEqual(regex, '^spam/[^/]')
 
 		pattern = GitIgnoreBasicPattern(re.compile(regex), include)
 		results = set(filter(pattern.match_file, [
 			'spam/bar',
+			'spam/',
 			'foo/spam/bar',
 		]))
 		self.assertEqual(results, {'spam/bar'})
@@ -363,7 +364,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 
 		regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/api/**')
 		self.assertTrue(include)
-		self.assertEqual(regex, '^(?s:.+/)?api/')
+		self.assertEqual(regex, '^(?s:.+/)?api/[^/]')
 
 		equiv_regex, include = GitIgnoreBasicPattern.pattern_to_regex('**/**/api/**/**')
 		self.assertTrue(include)
@@ -843,7 +844,7 @@ class GitIgnoreBasicPatternTest(unittest.TestCase):
 		"""
 		pattern = GitIgnoreBasicPattern('!libfoo/**')
 
-		self.assertEqual(pattern.regex.pattern, '^libfoo/')
+		self.assertEqual(pattern.regex.pattern, '^libfoo/[^/]')
 		self.assertIs(pattern.include, False)
 		self.assertTrue(pattern.match_file('libfoo/__init__.py'))
 
