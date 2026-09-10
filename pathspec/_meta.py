@@ -73,5 +73,6 @@ __credits__ = [
 	"Cohen Karnell <https://github.com/ckarnell>",
 	"KBS <https://github.com/youdie006>",
 	"Jack Walker <https://github.com/jackwalkerlabs>",
+	"Ryan Chou <https://github.com/ryanchou1994>",
 ]
 __license__ = "MPL 2.0"
