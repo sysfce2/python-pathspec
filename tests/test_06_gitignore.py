@@ -909,10 +909,10 @@ class GitIgnoreSpecTest(unittest.TestCase):
 				}, debug)
 
 
-	def test_12_issue_132_a(self):
-    """
-    Test that trailing glob-stars do not ignore parent.
-    """
+	def test_12_issue_137_a(self):
+		"""
+		Test that trailing glob-stars do not ignore parent.
+		"""
 		for sub_test in self.parameterize_from_lines(["d/**"]):
 			with sub_test() as spec:
 				self.assertFalse(spec.match_file("d/"))
