@@ -1,10 +1,15 @@
-name: Test All
+name: Test Cross-platform
 
 permissions:
   contents: read
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   test:
@@ -19,42 +24,32 @@ jobs:
           - windows
         python:
           - '3.9'
-          - '3.10'
-          - '3.11'
-          - '3.12'
-          - '3.13'
           - '3.14'
-          - 'pypy-3.9'
-          - 'pypy-3.10'
-          - 'pypy-3.11'
         backend:
           - base
           - hyperscan
           - re2
         exclude:
-          # Hyperscan does hot have wheels for Python 3.9 on Windows.
-          - os: windows
-            python: '3.9'
-            backend: hyperscan
-          # Hyperscan does not have wheels for PyPy 3.9 and 3.11.
-          - python: 'pypy-3.9'
-            backend: hyperscan
-          - python: 'pypy-3.11'
-            backend: hyperscan
-          # Hyperscan does hot have wheels for PyPy 3.10 on Mac.
+          # Only run MacOS / 3.14 / base for the cross test.
+          - python: '3.9'
+            os: macos
           - os: macos
-            python: 'pypy-3.10'
             backend: hyperscan
-          # Hyperscan does hot have wheels for PyPy 3.10 on Windows.
+          - os: macos
+            backend: re2
+          # For Ubuntu, only run extra backends with 3.14 for cross test.
+          - python: '3.9'
+            os: ubuntu
+            backend: hyperscan
+          - python: '3.9'
+            os: ubuntu
+            backend: re2
+          # Only run Windows / 3.14 / base for the cross test.
+          - python: '3.9'
+            os: windows
           - os: windows
-            python: 'pypy-3.10'
             backend: hyperscan
-          # Re2 does hot have wheels for PyPy.
-          - python: 'pypy-3.9'
-            backend: re2
-          - python: 'pypy-3.10'
-            backend: re2
-          - python: 'pypy-3.11'
+          - os: windows
             backend: re2
 
     steps:
